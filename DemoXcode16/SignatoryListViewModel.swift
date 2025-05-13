@@ -7,7 +7,7 @@
 
 import UIKit
 
-typealias DataSnapshot = NSDiffableDataSourceSnapshot<SignatoryListViewController.Section, AnyCellConfigurable>
+typealias DataSnapshot = NSDiffableDataSourceSnapshot<SignatoryListView.Section, AnyCellConfigurable>
 
 protocol SignatoryListViewModelInput {
     var signatories: [AnyCellConfigurable] { get set }

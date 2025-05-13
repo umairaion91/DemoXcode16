@@ -9,49 +9,21 @@ import UIKit
 
 class SignatoryListViewController: UIViewController {
     
-    enum Section {
-        case SignatoryCell
-        var title: String {
-            switch self {
-            case .SignatoryCell:
-                "Signatories"
-            }
-        }
-    }
-    
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(SignatoryCell.self, forCellReuseIdentifier: SignatoryCell.identifier)
-        return tableView
-    }()
-    
-    
-    private lazy var dataSource = GenericTableViewDataSource<Section>(tableView: tableView)
+    var View = SignatoryListView()
     var viewModel: SignatoryListViewModelType!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        setupTableView()
-        setupBindings()
+        View.setup(in: self.view)
+        bindViewModel()
         viewModel.input.loadData()
     }
     
-    private func setupTableView() {
-        view.addSubview(tableView)
-        tableView.delegate = self
-        tableView
-            .alignEdgeWithSuperviewSafeArea(.top)
-            .alignEdgesWithSuperview([.left, .right], constant: 20)
-            .alignEdgeWithSuperviewSafeArea(.bottom)
-    }
-    
-    private func setupBindings() {
+    private func bindViewModel() {
+        View.tableView.delegate = self
         viewModel.output.onUpdate = { [weak self] in
             guard let self = self else { return }
-            self.dataSource.apply(self.viewModel.output.makeSnapshot(), animatingDifferences: true)
+            View.dataSource.apply(self.viewModel.output.makeSnapshot(), animatingDifferences: true)
         }
     }
 }
@@ -59,7 +31,7 @@ class SignatoryListViewController: UIViewController {
 extension SignatoryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let type = dataSource.snapshot().sectionIdentifiers[section]
+        let type = View.dataSource.snapshot().sectionIdentifiers[section]
         return type.title
     }
     
@@ -79,7 +51,7 @@ extension SignatoryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let item = dataSource.itemIdentifier(for: indexPath),
+        guard let item = View.dataSource.itemIdentifier(for: indexPath),
               let signatory = item.model as? Signatory else {
             return
         }
