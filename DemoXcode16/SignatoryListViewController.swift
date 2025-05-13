@@ -93,5 +93,6 @@ extension SignatoryListViewController: UITableViewDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
         
+        
     }
 }
