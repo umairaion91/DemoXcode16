@@ -9,21 +9,21 @@ import UIKit
 
 class SignatoryListViewController: UIViewController {
     
-    var View = SignatoryListView()
+    private var signatoryListView = SignatoryListView()
     var viewModel: SignatoryListViewModelType!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        View.setup(in: self.view)
+        signatoryListView.setup(in: self.view)
         bindViewModel()
         viewModel.input.loadData()
     }
     
     private func bindViewModel() {
-        View.tableView.delegate = self
+        signatoryListView.tableView.delegate = self
         viewModel.output.onUpdate = { [weak self] in
             guard let self = self else { return }
-            View.dataSource.apply(self.viewModel.output.makeSnapshot(), animatingDifferences: true)
+            self.signatoryListView.dataSource.apply(self.viewModel.output.makeSnapshot(), animatingDifferences: true)
         }
     }
 }
@@ -31,7 +31,7 @@ class SignatoryListViewController: UIViewController {
 extension SignatoryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let type = View.dataSource.snapshot().sectionIdentifiers[section]
+        let type = signatoryListView.dataSource.snapshot().sectionIdentifiers[section]
         return type.title
     }
     
@@ -51,7 +51,7 @@ extension SignatoryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let item = View.dataSource.itemIdentifier(for: indexPath),
+        guard let item = signatoryListView.dataSource.itemIdentifier(for: indexPath),
               let signatory = item.model as? Signatory else {
             return
         }
