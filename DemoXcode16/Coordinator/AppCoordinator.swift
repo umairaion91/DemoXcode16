@@ -9,6 +9,7 @@ import UIKit
 final class AppCoordinator: Coordinator<Void> {
     
     private let window: UIWindow
+    private(set) var root: UINavigationController?
 
     init(window: UIWindow) {
         self.window = window
@@ -16,11 +17,12 @@ final class AppCoordinator: Coordinator<Void> {
 
     override func start(completion: @escaping (Result<Void, CoordinatorError>) -> Void) {
         
-        let navController = UINavigationController()
-        window.rootViewController = navController
+        root = UINavigationController()
+        window.rootViewController = root
         window.makeKeyAndVisible()
-
-        let signatoryCoordinator = SignatoryCoordinator(navigationController: navController)
+        
+        guard let root else { return }
+        let signatoryCoordinator = SignatoryCoordinator(root: root)
 
         coordinate(to: signatoryCoordinator) { result in
             switch result {

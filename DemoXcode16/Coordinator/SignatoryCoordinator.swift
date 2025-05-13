@@ -7,10 +7,11 @@
 import UIKit
 
 final class SignatoryCoordinator: Coordinator<Void> {
-    private let navigationController: UINavigationController
+    
+    private(set) var navigation: UINavigationController?
 
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init(root: UINavigationController) {
+        self.navigation = root
     }
 
     override func start(completion: @escaping (Result<Void, CoordinatorError>) -> Void) {
@@ -18,7 +19,11 @@ final class SignatoryCoordinator: Coordinator<Void> {
         let vc = SignatoryListViewController()
         vc.viewModel = viewModel
 
-        navigationController.pushViewController(vc, animated: true)
+        guard let navigation else {
+            completion(.failure(.unknown))
+            return
+        }
+        navigation.pushViewController(vc, animated: true)
 
         // Optionally call completion when needed
         // For now, complete immediately
