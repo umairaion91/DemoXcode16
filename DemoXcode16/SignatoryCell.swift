@@ -41,14 +41,9 @@ final class SignatoryCell: UITableViewCell {
     }
     
     private func setupViews() {
-        
         contentView.addSubview(title)
-        NSLayoutConstraint.activate([
-            title.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            title.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-            title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            title.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
-        ])
+        let insets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        title.alignAllEdgesWithSuperview(.equalTo, edgeInsets: insets)
     }
     
     func configure(with item: Signatory) {

@@ -42,13 +42,10 @@ class SignatoryListViewController: UIViewController {
     private func setupTableView() {
         view.addSubview(tableView)
         tableView.delegate = self
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        tableView
+            .alignEdgeWithSuperviewSafeArea(.top)
+            .alignEdgesWithSuperview([.left, .right], constant: 20)
+            .alignEdgeWithSuperviewSafeArea(.bottom)
     }
     
     private func setupBindings() {
