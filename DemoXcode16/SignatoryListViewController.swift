@@ -22,7 +22,7 @@ class SignatoryListViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(SignatoryCell.self, forCellReuseIdentifier: "SignatoryCell")
+        tableView.register(SignatoryCell.self, forCellReuseIdentifier: SignatoryCell.identifier)
         return tableView
     }()
     

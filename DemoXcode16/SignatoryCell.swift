@@ -11,7 +11,7 @@ public struct Signatory: Hashable, CellConfigurable {
     
     let id: UUID
     
-    var reuseIdentifier: String { "SignatoryCell" }
+    var reuseIdentifier: String { SignatoryCell.identifier }
     
     func configure(cell: UITableViewCell) {
         guard let cell = cell as? SignatoryCell else { return }
@@ -29,6 +29,7 @@ final class SignatoryCell: UITableViewCell {
         return label
     }()
     
+    static var identifier: String { String(describing: self)}
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
