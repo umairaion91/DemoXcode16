@@ -11,25 +11,41 @@ class SignatoryListViewController: UIViewController {
     
     private var signatoryListView = SignatoryListView()
     var viewModel: SignatoryListViewModelType!
+    private let loadingView = LoadingView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         signatoryListView.setup(in: self.view)
         bindViewModel()
-        viewModel.input.loadData()
+        viewModel.input.loadData(forceLoad: true)
     }
     
     private func bindViewModel() {
+        
         signatoryListView.tableView.delegate = self
+        
+        //Bind Data Source
         viewModel.output.onUpdate = { [weak self] in
             guard let self = self else { return }
-            self.signatoryListView.dataSource.apply(self.viewModel.output.makeSnapshot(),
+            self.signatoryListView.dataSource.apply(self.viewModel.output.defaultSnapshot(),
                                                     animatingDifferences: true)
             signatoryListView.endRefreshing()
+            self.loadingView.hide()
         }
         
+        //Bind refresh control
         signatoryListView.setOnRefresh { [weak self] in
-            self?.viewModel.input.loadData()
+            self?.viewModel.input.loadData(forceLoad: false)
+        }
+        
+        // Bind loading state
+        viewModel.output.onLoading = { [weak self] isLoading in
+            guard let self = self else { return }
+            if isLoading {
+                self.loadingView.show(in: self.view)
+            } else {
+                self.loadingView.hide()
+            }
         }
     }
 }
@@ -37,8 +53,9 @@ class SignatoryListViewController: UIViewController {
 extension SignatoryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let type = signatoryListView.dataSource.snapshot().sectionIdentifiers[section]
-        return type.title
+        let sections = signatoryListView.dataSource.snapshot().sectionIdentifiers
+        guard section < sections.count else { return nil }
+        return sections[section].title
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

@@ -6,15 +6,14 @@
 //
 import UIKit
 
-typealias DataSnapshot = NSDiffableDataSourceSnapshot<SignatoryListView.Section, AnyCellConfigurable>
-
 protocol SignatoryListViewModelInput {
-    func loadData()
+    func loadData(forceLoad: Bool)
 }
 
 protocol SignatoryListViewModelOutput {
-    var onUpdate: (() -> Void)? { get set }
-    func makeSnapshot()-> DataSnapshot
+    var onLoading: LoadingCallback? { get set }
+    var onUpdate: SimpleCallback? { get set }
+    func defaultSnapshot()-> DataSnapshot
 }
 
 protocol SignatoryListViewModelType {
@@ -32,21 +31,26 @@ final class SignatoryListViewModel: SignatoryListViewModelInput, SignatoryListVi
     private(set) var signatories: [AnyCellConfigurable] = []
     
     //MARK: Output
-    var onUpdate: (() -> Void)?
+    var onUpdate: SimpleCallback?
+    var onLoading: LoadingCallback?
     
     //MARK: Init
     init() { }
     
 
-    func loadData() {
-        signatories = [
-            AnyCellConfigurable(Signatory(name: "Alice")),
-            AnyCellConfigurable(Signatory(name: "Bob"))
-        ]
-        onUpdate?()
+    func loadData(forceLoad: Bool = true) {
+        onLoading?(forceLoad)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+            self.signatories = [
+                AnyCellConfigurable(Signatory(name: "Alice")),
+                AnyCellConfigurable(Signatory(name: "Bob"))
+            ]
+            self.onUpdate?()
+            self.onLoading?(false)
+        })
     }
 
-    func makeSnapshot() -> DataSnapshot {
+    func defaultSnapshot() -> DataSnapshot {
         var snapshot = DataSnapshot()
         snapshot.appendSections([.SignatoryCell])
         snapshot.appendItems(signatories, toSection: .SignatoryCell)
