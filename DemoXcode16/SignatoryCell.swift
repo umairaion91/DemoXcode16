@@ -9,7 +9,7 @@ import UIKit
 
 public struct Signatory: Hashable, CellConfigurable {
     
-    let id: UUID
+    let id: UUID = UUID()
     
     var reuseIdentifier: String { SignatoryCell.identifier }
     

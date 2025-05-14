@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SignatoryListView {
+final class SignatoryListView: RefreshableView {
     
     public enum Section {
         case SignatoryCell
@@ -25,6 +25,8 @@ final class SignatoryListView {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(SignatoryCell.self, forCellReuseIdentifier: SignatoryCell.identifier)
+        tableView.refreshControl = refreshControl
+        tableView.separatorStyle = .none
         return tableView
     }()
     

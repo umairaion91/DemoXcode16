@@ -23,7 +23,13 @@ class SignatoryListViewController: UIViewController {
         signatoryListView.tableView.delegate = self
         viewModel.output.onUpdate = { [weak self] in
             guard let self = self else { return }
-            self.signatoryListView.dataSource.apply(self.viewModel.output.makeSnapshot(), animatingDifferences: true)
+            self.signatoryListView.dataSource.apply(self.viewModel.output.makeSnapshot(),
+                                                    animatingDifferences: true)
+            signatoryListView.endRefreshing()
+        }
+        
+        signatoryListView.setOnRefresh { [weak self] in
+            self?.viewModel.input.loadData()
         }
     }
 }

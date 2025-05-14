@@ -1,16 +1,14 @@
 //
-//  SignatoryLisitViewModel.swift
+//  SignatoryListViewModel.swift
 //  DemoXcode16
 //
 //  Created by Admin on 12/05/2025.
 //
-
 import UIKit
 
 typealias DataSnapshot = NSDiffableDataSourceSnapshot<SignatoryListView.Section, AnyCellConfigurable>
 
 protocol SignatoryListViewModelInput {
-    var signatories: [AnyCellConfigurable] { get set }
     func loadData()
 }
 
@@ -27,10 +25,11 @@ protocol SignatoryListViewModelType {
 final class SignatoryListViewModel: SignatoryListViewModelInput, SignatoryListViewModelOutput, SignatoryListViewModelType {
    
     var input: SignatoryListViewModelInput { self }
-    var output:  SignatoryListViewModelOutput { get { self }  set { } }
-    
-    //MARK: Input
-    var signatories: [AnyCellConfigurable] = []
+    var output:  SignatoryListViewModelOutput {
+        get { self }
+        set { }
+    }
+    private(set) var signatories: [AnyCellConfigurable] = []
     
     //MARK: Output
     var onUpdate: (() -> Void)?
@@ -40,8 +39,10 @@ final class SignatoryListViewModel: SignatoryListViewModelInput, SignatoryListVi
     
 
     func loadData() {
-        signatories = [AnyCellConfigurable(Signatory(id: UUID(), name: "Alice")),
-                   AnyCellConfigurable(Signatory(id: UUID(), name: "Bob"))]
+        signatories = [
+            AnyCellConfigurable(Signatory(name: "Alice")),
+            AnyCellConfigurable(Signatory(name: "Bob"))
+        ]
         onUpdate?()
     }
 
@@ -51,4 +52,5 @@ final class SignatoryListViewModel: SignatoryListViewModelInput, SignatoryListVi
         snapshot.appendItems(signatories, toSection: .SignatoryCell)
         return snapshot
     }
+    
 }
