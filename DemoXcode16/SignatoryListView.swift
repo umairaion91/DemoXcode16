@@ -10,11 +10,15 @@ import UIKit
 final class SignatoryListView: RefreshableView {
     
     public enum Section {
-        case SignatoryCell
+        case Signatories
+        case Aprovers
+        
         var title: String {
             switch self {
-            case .SignatoryCell:
+            case .Signatories:
                 "Signatories"
+            case .Aprovers:
+                "Aprovers"
             }
         }
     }

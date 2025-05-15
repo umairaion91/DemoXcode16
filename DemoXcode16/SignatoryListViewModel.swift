@@ -29,6 +29,7 @@ final class SignatoryListViewModel: SignatoryListViewModelInput, SignatoryListVi
         set { }
     }
     private(set) var signatories: [AnyCellConfigurable] = []
+    private(set) var approvers: [AnyCellConfigurable] = []
     
     //MARK: Output
     var onUpdate: SimpleCallback?
@@ -45,15 +46,23 @@ final class SignatoryListViewModel: SignatoryListViewModelInput, SignatoryListVi
                 AnyCellConfigurable(Signatory(name: "Alice")),
                 AnyCellConfigurable(Signatory(name: "Bob"))
             ]
+            self.approvers = [
+                AnyCellConfigurable(Signatory(name: "John")),
+                AnyCellConfigurable(Signatory(name: "Smith"))
+            ]
             self.onUpdate?()
             self.onLoading?(false)
         })
+        
     }
 
     func defaultSnapshot() -> DataSnapshot {
         var snapshot = DataSnapshot()
-        snapshot.appendSections([.SignatoryCell])
-        snapshot.appendItems(signatories, toSection: .SignatoryCell)
+        snapshot.appendSections([.Signatories, .Aprovers])
+       
+        snapshot.appendItems(signatories, toSection: .Signatories)
+        // will not work should be unique signatories.reversed()
+        snapshot.appendItems(approvers, toSection: .Aprovers)
         return snapshot
     }
     
