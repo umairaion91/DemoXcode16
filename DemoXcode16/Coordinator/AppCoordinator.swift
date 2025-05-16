@@ -22,9 +22,9 @@ final class AppCoordinator: Coordinator<Void> {
         window.makeKeyAndVisible()
         
         guard let root else { return }
-        let signatoryCoordinator = SignatoryCoordinator(root: root)
+        let demoCoordinator = DemoCoordinator(root: root)
 
-        coordinate(to: signatoryCoordinator) { result in
+        coordinate(to: demoCoordinator) { result in
             switch result {
             case .success:
                 completion(.success(())) // Or do something else like restart app flow

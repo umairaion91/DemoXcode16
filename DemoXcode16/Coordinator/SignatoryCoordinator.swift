@@ -9,9 +9,11 @@ import UIKit
 final class SignatoryCoordinator: Coordinator<Void> {
     
     private(set) var navigation: UINavigationController?
+    private(set) var item: DemoItem
 
-    init(root: UINavigationController) {
+    init(root: UINavigationController, item: DemoItem) {
         self.navigation = root
+        self.item = item
     }
 
     override func start(completion: @escaping (Result<Void, CoordinatorError>) -> Void) {
@@ -19,7 +21,7 @@ final class SignatoryCoordinator: Coordinator<Void> {
         let vc = SignatoryListViewController()
         NavigationControllerFactory.configureNavigationItem(
             for: vc,
-            title: "DemoXcode16",
+            title: item.name,
             showBackButton: true,
             onBack: { [weak navigation] in navigation?.popViewController(animated: true) },
             rightButton: UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
@@ -31,9 +33,5 @@ final class SignatoryCoordinator: Coordinator<Void> {
             return
         }
         navigation.pushViewController(vc, animated: true)
-
-        // Optionally call completion when needed
-        // For now, complete immediately
-        completion(.success(()))
     }
 }
