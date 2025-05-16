@@ -16,8 +16,8 @@ final class AppCoordinator: Coordinator<Void> {
     }
 
     override func start(completion: @escaping (Result<Void, CoordinatorError>) -> Void) {
-        
-        root = UINavigationController()
+        //NavigationControllerFactory.makeTransparentNavigationController()
+        root = NavigationControllerFactory.makeOpaqueNavigationController(backgroundColor: .systemBackground)
         window.rootViewController = root
         window.makeKeyAndVisible()
         

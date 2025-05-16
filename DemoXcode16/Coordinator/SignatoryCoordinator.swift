@@ -17,6 +17,13 @@ final class SignatoryCoordinator: Coordinator<Void> {
     override func start(completion: @escaping (Result<Void, CoordinatorError>) -> Void) {
         let viewModel: SignatoryListViewModelType = SignatoryListViewModel()
         let vc = SignatoryListViewController()
+        NavigationControllerFactory.configureNavigationItem(
+            for: vc,
+            title: "DemoXcode16",
+            showBackButton: true,
+            onBack: { [weak navigation] in navigation?.popViewController(animated: true) },
+            rightButton: UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+        )
         vc.viewModel = viewModel
 
         guard let navigation else {
