@@ -43,12 +43,12 @@ final class SignatoryListViewModel: SignatoryListViewModelInput, SignatoryListVi
         onLoading?(forceLoad)
         DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
             self.signatories = [
-                AnyCellConfigurable(Signatory(name: "Alice")),
-                AnyCellConfigurable(Signatory(name: "Bob"))
+                AnyCellConfigurable(Signatory(name: "Alice", status: "Pending")),
+                AnyCellConfigurable(Signatory(name: "Bob", status: "In-review"))
             ]
             self.approvers = [
-                AnyCellConfigurable(Signatory(name: "John")),
-                AnyCellConfigurable(Signatory(name: "Smith"))
+                AnyCellConfigurable(Signatory(name: "John", status: "Approved")),
+                AnyCellConfigurable(Signatory(name: "Smith", status: "Declined"))
             ]
             self.onUpdate?()
             self.onLoading?(false)

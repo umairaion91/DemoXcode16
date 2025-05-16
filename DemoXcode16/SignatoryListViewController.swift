@@ -74,15 +74,16 @@ extension SignatoryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let item = signatoryListView.dataSource.itemIdentifier(for: indexPath),
-              let signatory = item.model as? Signatory else {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let item = signatoryListView.dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         
-        tableView.deselectRow(at: indexPath, animated: true)
+        if let signatory = item.model as? Signatory {
+            let alert = UIAlertController(title: signatory.name, message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+        }
         
-        let alert = UIAlertController(title: "Signatory", message: signatory.name, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 }
